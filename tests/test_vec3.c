@@ -179,6 +179,7 @@ bool subtraction_test(BASE_TEST_CASE test_case) {
     return passed;
 }
 
+// Test multiplication
 bool multiplication_test(SCALAR_TEST_CASE test_case) {
     vec3_t res = vec3_mult(test_case.v1, test_case.scalar);
 
@@ -187,6 +188,7 @@ bool multiplication_test(SCALAR_TEST_CASE test_case) {
     return passed;
 }
 
+// Test division
 bool division_test(SCALAR_TEST_CASE test_case) {
     vec3_t res = vec3_div(test_case.v1, test_case.scalar);
 
