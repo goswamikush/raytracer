@@ -1,3 +1,4 @@
+#include <math.h>
 #include "vec3.h"
 
 // Add
@@ -66,3 +67,10 @@ vec3_t vec3_cross(vec3_t v1, vec3_t v2) {
     return res;
 }
 
+float vec3_length(vec3_t v1) {
+    float res;
+
+    res = sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
+
+    return res;
+}
