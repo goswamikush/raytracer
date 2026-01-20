@@ -43,3 +43,14 @@ vec3_t vec3_div(vec3_t v1, float scalar) {
 
     return res;
 }
+
+// Dot product
+float vec3_dot(vec3_t v1, vec3_t v2) {
+    float res;
+
+    res += v1.x * v2.x;
+    res += v1.y * v2.y;
+    res += v1.z * v2.z;
+
+    return res;
+}
