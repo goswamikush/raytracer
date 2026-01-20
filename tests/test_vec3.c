@@ -11,9 +11,17 @@ typedef struct {
     vec3_t ground_truth;
 } BASE_TEST_CASE;
 
+typedef struct {
+    vec3_t v1;
+    float scalar;
+    vec3_t ground_truth;
+} SCALAR_TEST_CASE;
+
 bool addition_test(BASE_TEST_CASE);
 bool subtraction_test(BASE_TEST_CASE);
+bool multiplication_test(SCALAR_TEST_CASE);
 int base_test_runner(bool (*func)(BASE_TEST_CASE), BASE_TEST_CASE[], int);
+int scalar_test_runner(bool (*func)(SCALAR_TEST_CASE), SCALAR_TEST_CASE[], int);
 bool is_equal(vec3_t, vec3_t);
 
 int main() {
@@ -79,6 +87,37 @@ int main() {
     num_failed += sub_fail;
     num_passed += num_sub_cases - sub_fail;
 
+    SCALAR_TEST_CASE mutliply_test_cases[3];
+
+    SCALAR_TEST_CASE mult_t1 = {
+        {5, 6, 4},
+        5,
+        {25, 30, 20}
+    };
+
+    SCALAR_TEST_CASE mult_t2 = {
+        {5.1, 6.0567, 4.31234},
+        5,
+        {25.5, 30.2835, 21.5617}
+    };
+
+    SCALAR_TEST_CASE mult_t3 = {
+        {5.1, 6.2, 4.3},
+        4.5,
+        {22.95, 27.9, 19.35}
+    };
+
+    mutliply_test_cases[0] = mult_t1;
+    mutliply_test_cases[1] = mult_t2;
+    mutliply_test_cases[2] = mult_t3;
+
+    int num_mult_cases = sizeof(mutliply_test_cases) / sizeof(mutliply_test_cases[0]);
+
+    int mult_fail = scalar_test_runner(*multiplication_test, mutliply_test_cases, num_mult_cases);
+
+    num_failed += mult_fail;
+    num_passed += num_mult_cases - mult_fail; 
+
     printf("Total passed: %d\n", num_passed);
     printf("Total failes: %d\n", num_failed);
 
@@ -103,7 +142,34 @@ bool subtraction_test(BASE_TEST_CASE test_case) {
     return passed;
 }
 
+bool multiplication_test(SCALAR_TEST_CASE test_case) {
+    vec3_t res = vec3_mult(test_case.v1, test_case.scalar);
+
+    bool passed = is_equal(res, test_case.ground_truth);
+
+    return passed;
+}
+
 int base_test_runner(bool (*func)(BASE_TEST_CASE), BASE_TEST_CASE test_cases[], int num_cases) {
+    int num_passed = 0;
+    int num_failed = 0;
+
+    int i;
+    for (i = 0; i < num_cases; i++) {
+        bool passed = func(test_cases[i]);
+        if (passed) {
+            printf("Passed test case %d\n", i);
+            num_passed++;
+        } else {
+            printf("Passed test case %d\n", i);
+            num_failed++;
+        }
+    }
+
+    return num_failed;
+};
+
+int scalar_test_runner(bool (*func)(SCALAR_TEST_CASE), SCALAR_TEST_CASE test_cases[], int num_cases) {
     int num_passed = 0;
     int num_failed = 0;
 
