@@ -32,3 +32,14 @@ vec3_t vec3_mult(vec3_t v1, float scalar) {
 
     return res;
 }
+
+// Divide
+vec3_t vec3_div(vec3_t v1, float scalar) {
+    vec3_t res;
+
+    res.x = v1.x / scalar; 
+    res.y = v1.y / scalar; 
+    res.z = v1.z / scalar; 
+
+    return res;
+}

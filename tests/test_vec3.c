@@ -20,6 +20,7 @@ typedef struct {
 bool addition_test(BASE_TEST_CASE);
 bool subtraction_test(BASE_TEST_CASE);
 bool multiplication_test(SCALAR_TEST_CASE);
+bool division_test(SCALAR_TEST_CASE);
 int base_test_runner(bool (*func)(BASE_TEST_CASE), BASE_TEST_CASE[], int);
 int scalar_test_runner(bool (*func)(SCALAR_TEST_CASE), SCALAR_TEST_CASE[], int);
 bool is_equal(vec3_t, vec3_t);
@@ -81,12 +82,13 @@ int main() {
 
     int num_sub_cases = sizeof(subtraction_test_cases) / sizeof(subtraction_test_cases[0]);
 
-    printf("Running subtraction tests\n");
+    printf("\nRunning subtraction tests\n");
     int sub_fail = base_test_runner(*subtraction_test, subtraction_test_cases, num_sub_cases);
 
     num_failed += sub_fail;
     num_passed += num_sub_cases - sub_fail;
 
+    // Multiplication tests
     SCALAR_TEST_CASE mutliply_test_cases[3];
 
     SCALAR_TEST_CASE mult_t1 = {
@@ -113,13 +115,48 @@ int main() {
 
     int num_mult_cases = sizeof(mutliply_test_cases) / sizeof(mutliply_test_cases[0]);
 
+    printf("\nRunning multiplication tests\n");
     int mult_fail = scalar_test_runner(*multiplication_test, mutliply_test_cases, num_mult_cases);
 
     num_failed += mult_fail;
     num_passed += num_mult_cases - mult_fail; 
 
+    // Division tests
+    SCALAR_TEST_CASE division_test_cases[3];
+
+    SCALAR_TEST_CASE div_t1 = {
+        {5, 6, 4},
+        5,
+        {1, 1.2, 0.8}
+    };
+
+    SCALAR_TEST_CASE div_t2 = {
+        {5.1, 6.0567, 4.31234},
+        5,
+        {1.02, 1.21134, 0.862468}
+    };
+
+    SCALAR_TEST_CASE div_t3 = {
+        {5.1, 6.2, 4.3},
+        4.5,
+        {1.1333333, 1.377777, 0.95555555}
+    };
+
+    division_test_cases[0] = div_t1;
+    division_test_cases[1] = div_t2;
+    division_test_cases[2] = div_t3;
+
+    int num_div_cases = sizeof(division_test_cases) / sizeof(division_test_cases[0]);
+
+    printf("\nRunning division tests\n");
+    int div_fail = scalar_test_runner(*division_test, division_test_cases, num_div_cases);
+
+    num_failed += div_fail;
+    num_passed += num_div_cases - div_fail; 
+
+    printf("\n=== Final Results ===\n");
     printf("Total passed: %d\n", num_passed);
-    printf("Total failes: %d\n", num_failed);
+    printf("Total failed: %d\n", num_failed);
 
     return 1;
 }
@@ -144,6 +181,14 @@ bool subtraction_test(BASE_TEST_CASE test_case) {
 
 bool multiplication_test(SCALAR_TEST_CASE test_case) {
     vec3_t res = vec3_mult(test_case.v1, test_case.scalar);
+
+    bool passed = is_equal(res, test_case.ground_truth);
+
+    return passed;
+}
+
+bool division_test(SCALAR_TEST_CASE test_case) {
+    vec3_t res = vec3_div(test_case.v1, test_case.scalar);
 
     bool passed = is_equal(res, test_case.ground_truth);
 
