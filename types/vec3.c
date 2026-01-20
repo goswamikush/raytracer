@@ -54,3 +54,15 @@ float vec3_dot(vec3_t v1, vec3_t v2) {
 
     return res;
 }
+
+// Cross product
+vec3_t vec3_cross(vec3_t v1, vec3_t v2) {
+    vec3_t res;
+
+    res.x = v1.y * v2.z - v1.z * v2.y;
+    res.y = v1.z * v2.x - v1.x * v2.z;
+    res.z = v1.x * v2.y - v1.y * v2.x;
+
+    return res;
+}
+
