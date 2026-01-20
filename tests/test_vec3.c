@@ -9,9 +9,10 @@ typedef struct {
     vec3_t v1;
     vec3_t v2;
     vec3_t ground_truth;
-} ADDITION_TEST_CASE;
+} BASE_TEST_CASE;
 
-bool addition_test(ADDITION_TEST_CASE);
+bool addition_test(BASE_TEST_CASE);
+bool subtraction_test(BASE_TEST_CASE);
 bool is_equal(vec3_t, vec3_t);
 
 int main() {
@@ -19,9 +20,9 @@ int main() {
     int num_failed = 0;
 
     // Setup addition test cases
-    ADDITION_TEST_CASE addition_test_cases[2];
+    BASE_TEST_CASE addition_test_cases[2];
 
-    ADDITION_TEST_CASE simple = {
+    BASE_TEST_CASE simple = {
         {1, 5, 4},
         {2, 6, 8},
         {3, 11, 12}
@@ -29,7 +30,7 @@ int main() {
 
     addition_test_cases[0] = simple;
 
-    ADDITION_TEST_CASE complex = {
+    BASE_TEST_CASE complex = {
         {1.022, 5.891, 4.56},
         {2.2, 6.12, 8.97},
         {3.222, 12.0110, 13.53}
@@ -54,6 +55,45 @@ int main() {
         }
     };
 
+    // Setup subtraction test cases
+    BASE_TEST_CASE subtraction_test_cases[3];
+
+    BASE_TEST_CASE t1 = {
+        {9, 5, 4},
+        {6, 3, 2},
+        {3, 2, 2},
+    };
+
+    subtraction_test_cases[0] = t1;
+
+    BASE_TEST_CASE t2 = {
+        {3, 1, 4},
+        {6, 3, 2},
+        {-3, -2, 2},
+    };
+
+    subtraction_test_cases[1] = t2;
+
+    BASE_TEST_CASE t3 = {
+        {1.022, 6.891, 4.56},
+        {2.2, 5.12, 8.97},
+        {-1.178, 1.771, -4.41}
+    };
+
+    subtraction_test_cases[2] = t3;
+
+    printf("Running subtraction tests");
+    for (i = 0; i < num_cases; i++) {
+        passed = subtraction_test(subtraction_test_cases[i]);
+        if (passed) {
+            printf("Passed test case %d\n", i);
+            num_passed++;
+        } else {
+            printf("Passed test case %d\n", i);
+            num_failed++;
+        }
+    };
+
     printf("Total passed: %d\n", num_passed);
     printf("Total failes: %d\n", num_failed);
 
@@ -61,8 +101,17 @@ int main() {
 }
 
 // Test addition
-bool addition_test(ADDITION_TEST_CASE test_case) {
+bool addition_test(BASE_TEST_CASE test_case) {
     vec3_t res = vec3_add(test_case.v1, test_case.v2);
+
+    bool passed = is_equal(res, test_case.ground_truth);
+
+    return true;
+}
+
+// Test subtraction
+bool subtraction_test(BASE_TEST_CASE test_case) {
+    vec3_t res = vec3_sub(test_case.v1, test_case.v2);
 
     bool passed = is_equal(res, test_case.ground_truth);
 
