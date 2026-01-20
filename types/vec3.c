@@ -47,7 +47,7 @@ vec3_t vec3_div(vec3_t v1, float scalar) {
 
 // Dot product
 float vec3_dot(vec3_t v1, vec3_t v2) {
-    float res;
+    float res = 0;
 
     res += v1.x * v2.x;
     res += v1.y * v2.y;
@@ -67,10 +67,24 @@ vec3_t vec3_cross(vec3_t v1, vec3_t v2) {
     return res;
 }
 
+// Vector length
 float vec3_length(vec3_t v1) {
     float res;
 
     res = sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
+
+    return res;
+}
+
+// Normalize
+vec3_t vec3_normalize(vec3_t v1) {
+    vec3_t res;
+
+    float v1_length = vec3_length(v1);
+
+    res.x = v1.x / v1_length;
+    res.y = v1.y / v1_length;
+    res.z = v1.z / v1_length;
 
     return res;
 }
