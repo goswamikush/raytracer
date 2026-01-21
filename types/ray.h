@@ -8,6 +8,6 @@ typedef struct {
     vec3_t direction;
 } ray_t;
 
-vec3_t ray_at(ray_t  ray, float t);
+vec3_t ray_at(ray_t, float);
 
 #endif
