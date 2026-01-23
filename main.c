@@ -1,5 +1,6 @@
 #include <stdio.h> 
 #include <stdint.h>
+#include <stdlib.h>
 #include "math.h"
 #include "types/rgb.h"
 #include "utils/ppm.h"
@@ -72,12 +73,6 @@ void create_image() {
                 curr_color.b = 255 + (255 - 255) * y / 225.0;
 
                 image[y][x] = curr_color;
-            }
-
-            if (x == 200 && y == 112) {
-                printf("Center ray: origin=(%.2f,%.2f,%.2f) dir=(%.2f,%.2f,%.2f)\n", 
-                    curr_ray.origin.x, curr_ray.origin.y, curr_ray.origin.z,
-                    curr_ray.direction.x, curr_ray.direction.y, curr_ray.direction.z);
             }
         }
     }
