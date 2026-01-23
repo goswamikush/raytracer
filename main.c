@@ -1,5 +1,6 @@
 #include <stdio.h> 
 #include <stdint.h>
+#include "math.h"
 #include "types/rgb.h"
 #include "utils/ppm.h"
 #include "types/camera.h"
@@ -25,6 +26,9 @@ void create_image() {
         .radius = 0.5,
     };
 
+    // Create light source
+    vec3_t light_pos = {2, 2, 0};
+
     // Loop through pixels and check if hits sphere
     int x;
     int y;
@@ -37,13 +41,21 @@ void create_image() {
             intersection_t inter = ray_hits_sphere(curr_ray, sphere);
             
             if (inter.is_hit) {
-                // Calculate normal of intersection point
+                // Normal of intersection point
                 vec3_t inter_norm = vec3_normalize(vec3_sub(inter.point, sphere.center));
 
-                // Calculate color value from norm
+                // Direction from intersection point to light source
+                vec3_t light_dir = vec3_normalize(vec3_sub(light_pos, inter.point));
+
+                // Diffuse intensity
+                float diffuse_intensity = fmax(0, vec3_dot(inter_norm, light_dir));
+                float final_intensity = diffuse_intensity + 0.2;
+
+                // Color value from norm
                 vec3_t color = vec3_mult(vec3_add(inter_norm, (vec3_t){1, 1, 1}), 0.5 * 255);
-                RGB new_color = {color.x, color.y, color.z};
-                image[y][x] = new_color;
+                color = vec3_mult(color, final_intensity);
+
+                image[y][x] = (RGB){color.x, color.y, color.z};
             } else {
                 curr_color.r = 127 + (255 - 127) * y / 225.0;
                 curr_color.g = 178 + (255 - 178) * y / 225.0;
