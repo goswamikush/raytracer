@@ -4,6 +4,7 @@
 #include "utils/ppm.h"
 #include "types/camera.h"
 #include "types/sphere.h"
+#include "types/common.h"
 
 RGB image[225][400];
 
@@ -33,16 +34,16 @@ void create_image() {
     for (y = 0; y < 225; y++) {
         for (x = 0; x < 400; x++) {
             ray_t curr_ray = get_ray_for_pixel(x, y, cam);
-            float hit_pos = ray_hits_sphere(curr_ray, sphere);
-            bool is_hit = false;
+            intersection_t inter = ray_hits_sphere(curr_ray, sphere);
+            
+            if (inter.is_hit) {
+                // Calculate normal of intersection point
+                vec3_t inter_norm = vec3_normalize(vec3_sub(inter.point, sphere.center));
 
-            if (hit_pos > 0) {
-                is_hit = true;
-            }
-
-            if (is_hit) {
-                RGB red_color = {255, 0, 0};
-                image[y][x] = red_color;
+                // Calculate color value from norm
+                vec3_t color = vec3_mult(vec3_add(inter_norm, (vec3_t){1, 1, 1}), 0.5 * 255);
+                RGB new_color = {color.x, color.y, color.z};
+                image[y][x] = new_color;
             } else {
                 curr_color.r = 127 + (255 - 127) * y / 225.0;
                 curr_color.g = 178 + (255 - 178) * y / 225.0;

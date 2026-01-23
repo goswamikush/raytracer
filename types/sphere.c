@@ -2,8 +2,10 @@
 #include "math.h"
 #include "vec3.h"
 #include "sphere.h"
+#include "ray.h"
+#include "common.h"
 
-float ray_hits_sphere(ray_t ray, sphere_t s) {
+intersection_t ray_hits_sphere(ray_t ray, sphere_t s) {
     vec3_t oc = vec3_sub(ray.origin, s.center);
 
     float a = vec3_dot(ray.direction, ray.direction);
@@ -19,21 +21,19 @@ float ray_hits_sphere(ray_t ray, sphere_t s) {
         // Both positive values
         if (t1 > 0 && t2 > 0) {
             if (t1 < t2) {
-                return t1;
+                return (intersection_t){ray_at(ray, t1), true};
             }
 
-            return t2;
+            return (intersection_t){ray_at(ray, t2), true};;
         }
 
         // One positive one negative
         if ((t1 > 0 && t2 < 0) || (t1 < 0 && t2 > 0)) {
             if (t1 > 0) {
-                return t1;
+                return (intersection_t){ray_at(ray, t1), true};
             }
-
-            return t2;
+            return (intersection_t){ray_at(ray, t2), true};
         }
     }
-
-    return -1;
+    return (intersection_t){{0, 0, 0}, false};
 }
