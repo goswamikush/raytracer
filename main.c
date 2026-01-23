@@ -33,7 +33,12 @@ void create_image() {
     for (y = 0; y < 225; y++) {
         for (x = 0; x < 400; x++) {
             ray_t curr_ray = get_ray_for_pixel(x, y, cam);
-            bool is_hit = ray_hits_sphere(curr_ray, sphere);
+            float hit_pos = ray_hits_sphere(curr_ray, sphere);
+            bool is_hit = false;
+
+            if (hit_pos > 0) {
+                is_hit = true;
+            }
 
             if (is_hit) {
                 RGB red_color = {255, 0, 0};

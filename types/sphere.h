@@ -9,6 +9,6 @@ typedef struct {
     float radius;
 } sphere_t;
 
-bool ray_hits_sphere(ray_t, sphere_t);
+float ray_hits_sphere(ray_t, sphere_t);
 
 #endif
