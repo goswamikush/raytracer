@@ -47,9 +47,19 @@ void create_image() {
                 // Direction from intersection point to light source
                 vec3_t light_dir = vec3_normalize(vec3_sub(light_pos, inter.point));
 
+                // Reflection direction
+                vec3_t temp = vec3_mult(inter_norm, vec3_dot(inter_norm, light_dir) * 2);
+                vec3_t reflection_dir = vec3_sub(light_dir, temp);
+
+                // View direction
+                vec3_t view_dir = vec3_normalize(vec3_sub(cam.position, inter.point));
+
+                // Specular intensity
+                float spec_intensity = pow(fmax(0, vec3_dot(view_dir, reflection_dir)), 64);
+
                 // Diffuse intensity
                 float diffuse_intensity = fmax(0, vec3_dot(inter_norm, light_dir));
-                float final_intensity = diffuse_intensity + 0.2;
+                float final_intensity = diffuse_intensity + 0.2 + spec_intensity;
 
                 // Color value from norm
                 vec3_t color = vec3_mult(vec3_add(inter_norm, (vec3_t){1, 1, 1}), 0.5 * 255);
